@@ -16,5 +16,5 @@ export async function extractRepoContext(repoUrl){
 
         context.push(`FILE:${file.path} ${content}`);
     }
-    return context.json("\n");
+    return context.join("\n");
 }
