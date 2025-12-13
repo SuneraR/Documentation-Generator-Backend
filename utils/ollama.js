@@ -7,7 +7,12 @@ export async function askDeepSeekAndGet(prompt) {
     body: JSON.stringify({
       model: "deepseek-coder",
       prompt,
-      stream: true
+      stream: true,
+      options: {
+        temperature: 0.3,  // Lower temperature for more focused output
+        top_p: 0.9,
+        num_predict: 2000  // Allow longer responses
+      }
     })
   });
 
