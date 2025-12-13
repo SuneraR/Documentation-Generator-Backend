@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 
 const GITHUB_API = "https://api.github.com";
 
-async function fetchRepoFiles(owner, repo, path = "") {
+export async function fetchRepoFiles(owner, repo, path = "") {
   const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${path}`;
 
   const response = await fetch(url, {

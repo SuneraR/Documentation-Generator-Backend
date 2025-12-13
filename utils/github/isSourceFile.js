@@ -15,7 +15,7 @@ const SOURCE_EXTENSIONS = [
   ".md"
 ];
 
-function isSourceFile(file) {
+export function isSourceFile(file) {
   const name = file.name.toLowerCase();
   return SOURCE_EXTENSIONS.some(ext => name.endsWith(ext));
 }
