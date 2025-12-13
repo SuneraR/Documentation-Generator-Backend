@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import { askDeepSeekAndGet } from "./utils/ollama.js";
 import { parseRepoUrl } from "./utils/github/parseRepoUrl.js";
@@ -24,12 +25,30 @@ app.post("/generate-docs", async (req, res) => {
   const repoContext = await extractRepoContext(link);
 
   const prompt = `You are an expert documentation generator.
-Analyze the following GitHub repository and generate:
-- README.md
-- Architecture summary
-- API documentation
+
+Analyze the following GitHub repository source code and generate comprehensive documentation.
+
+Generate:
+1. A professional README.md with:
+   - Project overview and purpose
+   - Installation instructions
+   - Usage examples
+   - Key features
+
+2. Architecture summary explaining:
+   - Project structure
+   - Main components and their relationships
+   - Technology stack
+
+3. API documentation (if applicable)
+
+---
+REPOSITORY SOURCE CODE:
+---
 ${repoContext}
-`;
+---
+
+Provide clear, professional documentation in markdown format.`;
 
   const output = await askDeepSeekAndGet(prompt);
 

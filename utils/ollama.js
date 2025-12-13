@@ -12,22 +12,32 @@ export async function askDeepSeekAndGet(prompt) {
   });
 
   let result = "";
+  let buffer = "";
 
   for await (const chunk of response.body) {
-    const lines = chunk.toString().split("\n");
+    buffer += chunk.toString();
+    const lines = buffer.split("\n");
+    
+    // Keep the last incomplete line in buffer
+    buffer = lines.pop() || "";
 
     for (const line of lines) {
       if (!line.trim()) continue;
 
-      const json = JSON.parse(line);
+      try {
+        const json = JSON.parse(line);
 
-      if (json.response) {
-        result += json.response;
+        if (json.response) {
+          result += json.response;
+        }
+
+        if (json.done) {
+          return result;
+        }
+      } catch (error) {
+        // Skip invalid JSON lines
+        console.warn("Skipping invalid JSON line:", line);
       }
-
-      if (json.done) {
-        return result;
       }
     }
   }
-}

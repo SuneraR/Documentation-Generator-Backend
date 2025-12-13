@@ -15,7 +15,21 @@ const SOURCE_EXTENSIONS = [
   ".md"
 ];
 
+const EXCLUDED_FILES = [
+  "package-lock.json",
+  "yarn.lock",
+  "pnpm-lock.yaml",
+  ".npmrc",
+  "npm-debug.log"
+];
+
 export function isSourceFile(file) {
   const name = file.name.toLowerCase();
+  
+  // Exclude specific large files
+  if (EXCLUDED_FILES.includes(name)) {
+    return false;
+  }
+  
   return SOURCE_EXTENSIONS.some(ext => name.endsWith(ext));
 }
