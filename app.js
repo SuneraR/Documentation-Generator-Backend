@@ -1,12 +1,13 @@
 import "dotenv/config";
 import express from "express";
+import cors from "cors";
 import { askDeepSeekAndGet } from "./utils/ollama.js";
 import { parseRepoUrl } from "./utils/github/parseRepoUrl.js";
 import { extractRepoContext } from "./utils/github/extractRepoContext.js";
 import { isInvalidDocumentation } from "./utils/rejectBadOutput.js";
 
-
 const app = express();
+app.use(cors());
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
@@ -100,6 +101,17 @@ ${prompt}
   }
 
   res.json({ docs: output });
+});
+
+app.post("/download-readme", (req, res) => {
+  const { docs } = req.body;
+  if (!docs || docs.trim() === "") {
+    return res.status(400).json({ error: "No documentation provided" });
+  }
+
+  res.setHeader("Content-Type", "text/markdown");
+  res.setHeader("Content-Disposition", "attachment; filename=README.md");
+  res.send(docs);
 });
 
 app.listen(PORT, () => {
