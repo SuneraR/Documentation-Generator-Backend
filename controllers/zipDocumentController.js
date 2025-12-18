@@ -49,12 +49,12 @@ export const generateZipDocument = async (req, res) => {
 
           console.log("Calling AI to generate documentation...");
 
-          const prompt = documentationPrompt({repoContext});
+          const prompt = documentationPrompt(repoContext);
 
           let output = await askDeepSeekAndGet(prompt);
 
           if (isInvalidDocumentation(output)) {
-            output = await askDeepSeekAndGet(InvalidDocumentationPrompt({ prompt }));
+            output = await askDeepSeekAndGet(InvalidDocumentationPrompt(prompt));
           }
           console.log("AI documentation generated, length:", output.length);
 

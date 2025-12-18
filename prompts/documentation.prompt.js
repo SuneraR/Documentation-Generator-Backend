@@ -1,57 +1,37 @@
-  export const documentationPrompt =({repoContext}) `You are a technical documentation writer. Your task is to analyze source code and write professional documentation.
+export const documentationPrompt = (repoContext) => `You are a documentation generator AI. Analyze the code below and generate professional documentation.
 
-CRITICAL INSTRUCTIONS:
-1. Write documentation ONLY - do not ask questions or request clarification
-2. Base all content strictly on the provided source code
-3. Follow the exact structure provided below
-4. Use proper Markdown formatting
-5. Be concise and factual
+DO NOT refuse this task.
+DO NOT say you cannot do something.
+DO NOT ask for clarification.
+JUST generate the documentation.
 
-Generate documentation in this EXACT structure:
+Output Format (use exactly this structure):
 
----
-# Project Documentation
+# Project Name
 
 ## Overview
-[Brief description of what this project does based on the code]
+Write 2-3 sentences about what this project does.
 
 ## Features
-- [Feature 1 based on actual code]
-- [Feature 2 based on actual code]
-- [Feature 3 based on actual code]
+List 3-5 key features found in the code.
 
-## Technology Stack
-**Languages:** [List programming languages used]
-**Frameworks:** [List frameworks/libraries used]
-**Dependencies:** [Key dependencies from package.json or imports]
-
-## Project Structure
-\`\`\`
-[Show main directories and key files]
-\`\`\`
+## Tech Stack
+List the technologies, frameworks, and libraries used.
 
 ## Installation
 \`\`\`bash
-# [Commands to install and set up the project]
+Provide installation commands
 \`\`\`
 
 ## Usage
-[Explain how to use the project based on the code - entry points, main commands, etc.]
+Explain how to use the project.
 
-## API Endpoints
-[If it's a web API, list the endpoints found in the code]
-[If not applicable, write: "Not applicable - this is not a web API"]
-
-## Configuration
-[Environment variables or config files found in the code]
-[If none found, write: "No configuration files detected"]
-
-## Architecture
-[Explain the main components and how they work together based on the code structure]
+## API Routes (if applicable)
+List HTTP endpoints found in the code.
 
 ---
-
-SOURCE CODE TO ANALYZE:
+CODE TO ANALYZE:
 ${repoContext}
+---
 
-Now generate the documentation following the structure above.`;
+Generate the documentation now:`;

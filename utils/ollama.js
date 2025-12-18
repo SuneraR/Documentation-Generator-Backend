@@ -11,7 +11,8 @@ export async function askDeepSeekAndGet(prompt) {
       options: {
         temperature: 0.3,  // Lower temperature for more focused output
         top_p: 0.9,
-        num_predict: 2000  // Allow longer responses
+        num_predict: 2000,  // Allow longer responses
+        num_ctx: 8192  // Increase context window to 8K tokens
       }
     })
   });

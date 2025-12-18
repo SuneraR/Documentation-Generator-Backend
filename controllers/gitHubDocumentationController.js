@@ -26,13 +26,18 @@ export const generateDocumentation = async (req, res) => {
     }
 
     const repoContext = await extractRepoContext(link);
+    
+    console.log("Context extracted, length:", repoContext.length);
+    console.log("First 500 chars:", repoContext.substring(0, 500));
 
-    const prompt = documentationPrompt({repoContext});
+    const prompt = documentationPrompt(repoContext);
+    
+    console.log("Prompt length:", prompt.length);
 
     let output = await askDeepSeekAndGet(prompt);
 
     if (isInvalidDocumentation(output)) {
-      output = await askDeepSeekAndGet(InvalidDocumentationPrompt({ prompt }));
+      output = await askDeepSeekAndGet(InvalidDocumentationPrompt(prompt));
     }
 
     res.json({ docs: output });

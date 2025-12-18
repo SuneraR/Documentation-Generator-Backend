@@ -40,15 +40,16 @@ const EXCLUDED_FILES = [
   "npm-debug.log",
 ];
 
-const MAX_FILE_SIZE = 100000; // 100KB per file
+const MAX_FILE_SIZE = 50000; // 50KB per file
+const MAX_CONTEXT_LENGTH = 15000; // ~3000 tokens (4 chars per token avg)
 
 export async function extractRepoContextFromFolder(dir) {
   let context = "";
   let fileCount = 0;
-  const MAX_FILES = 50;
+  const MAX_FILES = 20;
 
   async function walk(folder) {
-    if (fileCount >= MAX_FILES) return;
+    if (fileCount >= MAX_FILES || context.length >= MAX_CONTEXT_LENGTH) return;
     
     const files = await fs.promises.readdir(folder);
 
@@ -69,10 +70,17 @@ export async function extractRepoContextFromFolder(dir) {
         if (stat.size > MAX_FILE_SIZE) continue;
         
         if (ALLOWED_EXTENSIONS.includes(path.extname(file))) {
+          if (context.length >= MAX_CONTEXT_LENGTH) break;
+          
           const content = await fs.promises.readFile(fullPath, "utf-8");
           const relativePath = path.relative(dir, fullPath);
-          context += `\n---\nFILE: ${relativePath}\n---\n${content}\n`;
-          fileCount++;
+          const fileEntry = `\n---\nFILE: ${relativePath}\n---\n${content}\n`;
+          
+          // Only add if it won't exceed limit
+          if (context.length + fileEntry.length <= MAX_CONTEXT_LENGTH) {
+            context += fileEntry;
+            fileCount++;
+          }
         }
       }
     }
